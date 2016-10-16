@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 //开发者:Rear82
 
+
 public class EatSnake {
 
 	static boolean survive;
