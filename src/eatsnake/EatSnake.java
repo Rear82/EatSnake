@@ -9,50 +9,50 @@ import java.util.logging.Logger;
 
 public class EatSnake {
 
-	static boolean suv;
-	static int changdu = 3;
-	static int bushu = 3;
-	static int tu[][] = new int[20][20];
-	static int tuback[][][] = new int[1000][20][20];
-	static int fang = 1;
-	static int fangback[] = new int[1000];
-	static int lu[][] = new int[1000][5];
-	static int luback[][][] = new int[1000][1000][5];
+	static boolean survive;
+	static int lengthOfSnake = 3;
+	static int stepOfGame = 3;
+	static int gameBoard[][] = new int[20][20];
+	static int chessBoardBack[][][] = new int[1000][20][20];
+	static int Direction = 1;
+	static int DirectionBack[] = new int[1000];
+	static int pathOfSnake[][] = new int[1000][5];
+	static int pathOfSnakeBack[][][] = new int[1000][1000][5];
 
-	public static void cundang() throws Exception {
+	public static void saveOnFile() throws Exception {
 		File file = new File("存档.txt");
 		if (!file.exists()) {
 			file.createNewFile();
 		}
 		BufferedWriter br = new BufferedWriter(new FileWriter(file));
 
-		br.write(Integer.toString(changdu));
+		br.write(Integer.toString(lengthOfSnake));
 		br.newLine();
-		br.write(Integer.toString(fang));
+		br.write(Integer.toString(Direction));
 		br.newLine();
-		br.write(Integer.toString(bushu));
+		br.write(Integer.toString(stepOfGame));
 		for (int i = 0; i < 20; i++) {
 			for (int j = 0; j < 20; j++) {
 				br.newLine();
-				br.write(Integer.toString(tu[i][j]));
+				br.write(Integer.toString(gameBoard[i][j]));
 			}
 		}
 		int j;
-		for (j = bushu - changdu + 1; j <= bushu; j++) {
+		for (j = stepOfGame - lengthOfSnake + 1; j <= stepOfGame; j++) {
 			br.newLine();
-			br.write(Integer.toString(lu[j][1]));
+			br.write(Integer.toString(pathOfSnake[j][1]));
 			br.newLine();
-			br.write(Integer.toString(lu[j][2]));
+			br.write(Integer.toString(pathOfSnake[j][2]));
 		}
 
 		br.close();
 	}
 
-	public static void duqu() throws Exception {
+	public static void readFromFile() throws Exception {
 		File file = new File("存档.txt");
 		if (!file.exists()) {
 			System.out.println("没有发现存档文件！");
-			qingkong(tu);
+			clear(gameBoard);
 
 		} else {
 			InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "utf-8");
@@ -75,12 +75,12 @@ public class EatSnake {
 				i++;
 			}
 
-			changdu = shuju[0];
-			fang = shuju[1];
-			bushu = shuju[2];
+			lengthOfSnake = shuju[0];
+			Direction = shuju[1];
+			stepOfGame = shuju[2];
 			for (i = 0; i < 20; i++) {
 				for (j = 0; j < 20; j++) {
-					tu[i][j] = shuju[i * 20 + j + 3];
+					gameBoard[i][j] = shuju[i * 20 + j + 3];
 				}
 			}
 
@@ -88,7 +88,7 @@ public class EatSnake {
 				if (shuju[i] == -1) {
 					break;
 				} else {
-					lu[bushu - changdu + 1 + (int) ((i - 403) / 2)][(i - 403) % 2 + 1] = shuju[i];
+					pathOfSnake[stepOfGame - lengthOfSnake + 1 + (int) ((i - 403) / 2)][(i - 403) % 2 + 1] = shuju[i];
 				}
 			}
 
@@ -97,12 +97,12 @@ public class EatSnake {
 	}
 
 	public static void gameover() {
-		suv = false;
+		survive = false;
 		myprint("*", 20);
 		System.out.println("\n");
-		myprint(" ", 6, "game over!");
+		myprint(" ", 6, "Game over!");
 		System.out.println("\n");
-		myprint(" ", 3, "Your score is " + (changdu - 3));
+		myprint(" ", 3, "Your score is " + (lengthOfSnake - 3));
 		System.out.println("\n");
 		myprint("*", 20);
 		System.out.println("\n\n游戏结束，是否重新开始?(按y重新开始)\n");
@@ -111,53 +111,53 @@ public class EatSnake {
 		switch (m) {
 			case "Y":
 			case "y":
-				qingkong(tu);
-				//System.out.println(tu[19][19]);
+				clear(gameBoard);
+				//System.out.println(gameBoard[19][19]);
 				Timer timer = new Timer();
-				timer.schedule(new mytask(), 0, 1);
+				timer.schedule(new maingame(), 0, 1);
 				//timer.schedule(new shuru(),1,1)
 				System.out.println("\n");
 				System.out.println("\n");
 				System.out.println("游戏开始!!!");
-				xmlprint(tu);
+				xmlprint(gameBoard);
 				break;
 
 		}
 
 	}
 
-	public static void back() {
-		bushu--;
+	public static void gameBack() {
+		stepOfGame--;
 		for (int i = 0; i < 20; i++) {
 			for (int j = 0; j < 20; j++) {
-				tu[i][j] = tuback[bushu][i][j];
+				gameBoard[i][j] = chessBoardBack[stepOfGame][i][j];
 			}
 
 		}
 
 		for (int i = 0; i < 1000; i++) {
 			for (int j = 0; j < 5; j++) {
-				lu[i][j] = luback[bushu][i][j];
+				pathOfSnake[i][j] = pathOfSnakeBack[stepOfGame][i][j];
 			}
 		}
 
-		fang = fangback[bushu];
+		Direction = DirectionBack[stepOfGame];
 	}
 
-	public static void jilu() {
+	public static void gameSave() {
 		for (int i = 0; i < 20; i++) {
 			for (int j = 0; j < 20; j++) {
-				tuback[bushu][i][j] = tu[i][j];
+				chessBoardBack[stepOfGame][i][j] = gameBoard[i][j];
 			}
 		}
 
 		for (int i = 0; i < 1000; i++) {
 			for (int j = 0; j < 5; j++) {
-				luback[bushu][i][j] = lu[i][j];
+				pathOfSnakeBack[stepOfGame][i][j] = pathOfSnake[i][j];
 			}
 		}
 
-		fangback[bushu] = fang;
+		DirectionBack[stepOfGame] = Direction;
 	}
 
 	public static int ram(int a, int b) {
@@ -204,35 +204,35 @@ public class EatSnake {
 			String m = input.next();
 			switch (m) {
 				case "d":
-					fang = 1;
+					Direction = 1;
 					break;
 				case "s":
-					fang = 2;
+					Direction = 2;
 					break;
 				case "a":
-					fang = 3;
+					Direction = 3;
 					break;
 				case "w":
-					fang = 4;
+					Direction = 4;
 					break;
 			}
 		}
 	}
 
-	static class mytask extends TimerTask {
+	static class maingame extends TimerTask {
 
 		public void run() {
-			if (suv == true) {
+			if (survive == true) {
 				Scanner input = new Scanner(System.in);
 
 				String m = input.next();
 				String n = m;
 				switch (n) {
 					case "b":
-						if (bushu > 3) {
+						if (stepOfGame > 3) {
 							System.out.println("已撤销您的上一步操作。");
-							back();
-							xmlprint(tu);
+							gameBack();
+							xmlprint(gameBoard);
 						}
 						break;
 
@@ -242,77 +242,77 @@ public class EatSnake {
 					case "d":
 						switch (m) {
 							case "d":
-								if (fang != 3) {
-									fang = 1;
+								if (Direction != 3) {
+									Direction = 1;
 								}
 								break;
 							case "s":
-								if (fang != 4) {
-									fang = 2;
+								if (Direction != 4) {
+									Direction = 2;
 								}
 								break;
 							case "a":
-								if (fang != 1) {
-									fang = 3;
+								if (Direction != 1) {
+									Direction = 3;
 								}
 								break;
 							case "w":
-								if (fang != 2) {
-									fang = 4;
+								if (Direction != 2) {
+									Direction = 4;
 								}
 								break;
 							case "":
 								break;
 
 						}
-						bushu++;
-						switch (fang) {
+						stepOfGame++;
+						switch (Direction) {
 							case 1:
-								lu[bushu][1] = lu[bushu - 1][1];
-								lu[bushu][2] = lu[bushu - 1][2] + 1;
+								pathOfSnake[stepOfGame][1] = pathOfSnake[stepOfGame - 1][1];
+								pathOfSnake[stepOfGame][2] = pathOfSnake[stepOfGame - 1][2] + 1;
 								break;
 							case 2:
-								lu[bushu][1] = lu[bushu - 1][1] + 1;
-								lu[bushu][2] = lu[bushu - 1][2];
+								pathOfSnake[stepOfGame][1] = pathOfSnake[stepOfGame - 1][1] + 1;
+								pathOfSnake[stepOfGame][2] = pathOfSnake[stepOfGame - 1][2];
 								break;
 							case 3:
-								lu[bushu][1] = lu[bushu - 1][1];
-								lu[bushu][2] = lu[bushu - 1][2] - 1;
+								pathOfSnake[stepOfGame][1] = pathOfSnake[stepOfGame - 1][1];
+								pathOfSnake[stepOfGame][2] = pathOfSnake[stepOfGame - 1][2] - 1;
 								break;
 							case 4:
-								lu[bushu][1] = lu[bushu - 1][1] - 1;
-								lu[bushu][2] = lu[bushu - 1][2];
+								pathOfSnake[stepOfGame][1] = pathOfSnake[stepOfGame - 1][1] - 1;
+								pathOfSnake[stepOfGame][2] = pathOfSnake[stepOfGame - 1][2];
 								break;
 						}
-			//for(int i = bushu;i>bushu-changdu;i--)
+			//for(int i = stepOfGame;i>stepOfGame-lengthOfSnake;i--)
 						//{
 
 						//}
-						if (tu[lu[bushu][1]][lu[bushu][2]] == 1 || tu[lu[bushu][1]][lu[bushu][2]] == 2) {
+						if (gameBoard[pathOfSnake[stepOfGame][1]][pathOfSnake[stepOfGame][2]] == 1 || gameBoard[pathOfSnake[stepOfGame][1]][pathOfSnake[stepOfGame][2]] == 2) {
 							gameover();
 							cancel();
-						} else if (tu[lu[bushu][1]][lu[bushu][2]] == 3) {
-							changdu++;
-							tu[lu[bushu][1]][lu[bushu][2]] = 1;
+						} else if (gameBoard[pathOfSnake[stepOfGame][1]][pathOfSnake[stepOfGame][2]] == 3) {
+							lengthOfSnake++;
+							gameBoard[pathOfSnake[stepOfGame][1]][pathOfSnake[stepOfGame][2]] = 1;
 							int x = ram(0, 19);
 							int y = ram(0, 19);
-							while (tu[x][y] != 0) {
+							while (gameBoard[x][y] != 0) {
 								x = ram(0, 19);
 								y = ram(0, 19);
 							}
-							tu[x][y] = 3;
-							xmlprint(tu);
+							gameBoard[x][y] = 3;
+							xmlprint(gameBoard);
 
 						} else {
-							tu[lu[bushu][1]][lu[bushu][2]] = 1;
-							tu[lu[bushu - changdu][1]][lu[bushu - changdu][2]] = 0;
-							xmlprint(tu);
+							gameBoard[pathOfSnake[stepOfGame][1]][pathOfSnake[stepOfGame][2]] = 1;
+							gameBoard[pathOfSnake[stepOfGame - lengthOfSnake][1]][pathOfSnake[stepOfGame - lengthOfSnake][2]] = 0;
+							xmlprint(gameBoard);
 						}
 
-						jilu();
+						gameSave();
 						 {
 							try {
-								cundang();
+								saveOnFile();
 							} catch (Exception ex) {
 
 							}
@@ -336,11 +336,11 @@ public class EatSnake {
 		}
 	}
 
-	public static void qingkong(int[][] arr) {
-		changdu = 3;
-		bushu = 3;
-		fang = 1;
-		suv = true;
+	public static void clear(int[][] arr) {
+		lengthOfSnake = 3;
+		stepOfGame = 3;
+		Direction = 1;
+		survive = true;
 		for (int i = 0; i < 20; i++) {
 			for (int j = 0; j < 20; j++) {
 				if (i == 0 || i == 19 || j == 0 || j == 19) {
@@ -353,7 +353,7 @@ public class EatSnake {
 
 		for (int i = 0; i < 1000; i++) {
 			for (int j = 0; j < 5; j++) {
-				lu[i][j] = -1;
+				pathOfSnake[i][j] = -1;
 			}
 		}
 
@@ -361,29 +361,29 @@ public class EatSnake {
 		arr[1][2] = 1;
 		arr[1][3] = 1;
 
-		lu[1][1] = 1;
-		lu[1][2] = 1;
-		lu[2][1] = 1;
-		lu[2][2] = 2;
-		lu[3][1] = 1;
-		lu[3][2] = 3;
+		pathOfSnake[1][1] = 1;
+		pathOfSnake[1][2] = 1;
+		pathOfSnake[2][1] = 1;
+		pathOfSnake[2][2] = 2;
+		pathOfSnake[3][1] = 1;
+		pathOfSnake[3][2] = 3;
 		int x = ram(0, 19);
 		int y = ram(0, 19);
-		while (tu[x][y] != 0) {
+		while (gameBoard[x][y] != 0) {
 			x = ram(0, 19);
 			y = ram(0, 19);
 		}
-		tu[x][y] = 3;
+		gameBoard[x][y] = 3;
 		for (int i = 0; i < 10; i++) {
 			x = ram(0, 19);
 			y = ram(0, 19);
-			while (tu[x][y] != 0) {
+			while (gameBoard[x][y] != 0) {
 				x = ram(0, 19);
 				y = ram(0, 19);
 			}
-			tu[x][y] = 2;
+			gameBoard[x][y] = 2;
 		}
-		jilu();
+		gameSave();
 
 	}
 
@@ -395,29 +395,29 @@ public class EatSnake {
 		int u = 0;
 		switch (m) {
 			case "1":
-				suv = true;
+				survive = true;
 				try {
-					duqu();
+					readFromFile();
 				} catch (Exception ex) {
 					Logger.getLogger(EatSnake.class.getName()).log(Level.SEVERE, null, ex);
 				}
 				u = 1;
-				jilu();
+				gameSave();
 
 				break;
 		}
 		if (u == 0) {
-			qingkong(tu);
+			clear(gameBoard);
 		}
-		//System.out.println(tu[19][19]);
+		//System.out.println(gameBoard[19][19]);
 
 		//timer.schedule(new shuru(),1,1)
 		System.out.println("\n");
 		System.out.println("\n");
 		System.out.println("游戏开始!!!");
-		timer.schedule(new mytask(), 0, 1);
+		timer.schedule(new maingame(), 0, 1);
 
-		xmlprint(tu);
+		xmlprint(gameBoard);
 	}
 
 }
