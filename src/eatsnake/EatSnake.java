@@ -1,5 +1,6 @@
 package eatsnake;
 
+
 import java.util.Timer;
 import java.util.*;
 import java.io.*;
@@ -8,8 +9,30 @@ import java.util.logging.Logger;
 //开发者:Rear82
 
 
-public class EatSnake {
+class Thread1 extends Thread{
+	private String name;
+	public String m;
+	
+	public Thread1(String name) {
+		this.name=name;
+	}
+	public int Direction;
+	
+	public void run() {
+		m="d";
+		while(1==1){
+		Scanner input = new Scanner(System.in);
+		m = input.next();
+		}
+		
+	}
+}
 
+
+
+
+public class EatSnake {
+	static Thread1 th=new Thread1("a");
 	static boolean survive;
 	static int lengthOfSnake = 3;
 	static int stepOfGame = 3;
@@ -19,7 +42,9 @@ public class EatSnake {
 	static int DirectionBack[] = new int[1000];
 	static int pathOfSnake[][] = new int[1000][5];
 	static int pathOfSnakeBack[][][] = new int[1000][1000][5];
-
+	
+	
+	
 	public static void saveOnFile() throws Exception {
 		File file = new File("存档.txt");
 		if (!file.exists()) {
@@ -114,8 +139,11 @@ public class EatSnake {
 			case "y":
 				clear(gameBoard);
 				//System.out.println(gameBoard[19][19]);
+				System.out.println("请输入刷新间隔时间:");
+				int t = input.nextInt();
 				Timer timer = new Timer();
-				timer.schedule(new maingame(), 0, 1);
+				th.start();
+				timer.schedule(new maingame(), 0, t);
 				//timer.schedule(new shuru(),1,1)
 				System.out.println("\n");
 				System.out.println("\n");
@@ -221,12 +249,12 @@ public class EatSnake {
 	}
 
 	static class maingame extends TimerTask {
-
+	
 		public void run() {
 			if (survive == true) {
-				Scanner input = new Scanner(System.in);
+				
 
-				String m = input.next();
+				String m = th.m;
 				String n = m;
 				switch (n) {
 					case "b":
@@ -237,10 +265,7 @@ public class EatSnake {
 						}
 						break;
 
-					case "s":
-					case "a":
-					case "w":
-					case "d":
+					default:
 						switch (m) {
 							case "d":
 								if (Direction != 3) {
@@ -285,7 +310,7 @@ public class EatSnake {
 								pathOfSnake[stepOfGame][2] = pathOfSnake[stepOfGame - 1][2];
 								break;
 						}
-			//for(int i = stepOfGame;i>stepOfGame-lengthOfSnake;i--)
+						//for(int i = stepOfGame;i>stepOfGame-lengthOfSnake;i--)
 						//{
 
 						//}
@@ -311,7 +336,7 @@ public class EatSnake {
 						}
 
 						gameSave();
-						 {
+						{
 							try {
 								saveOnFile();
 							} catch (Exception ex) {
@@ -393,6 +418,8 @@ public class EatSnake {
 		System.out.println("欢迎来到贪吃蛇小游戏！\n开发者:Rear82\n操作说明:使用w键向上，s键向下，d键向右，a键向左。\n您也可以输入b键来撤销上一步操作。\n输入1来载入上次游戏，输入2开始新的游戏！");
 		Scanner input = new Scanner(System.in);
 		String m = input.next();
+		System.out.println("请输入刷新间隔时间:");
+		int t = input.nextInt();
 		int u = 0;
 		switch (m) {
 			case "1":
@@ -416,8 +443,10 @@ public class EatSnake {
 		System.out.println("\n");
 		System.out.println("\n");
 		System.out.println("游戏开始!!!");
-		timer.schedule(new maingame(), 0, 1);
-
+		
+		th.start();
+		timer.schedule(new maingame(), 100, t);
+		
 		xmlprint(gameBoard);
 	}
 
