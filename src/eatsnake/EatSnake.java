@@ -1,38 +1,42 @@
 package eatsnake;
 
-
 import java.util.Timer;
 import java.util.*;
 import java.io.*;
+import static java.lang.Thread.sleep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 //开发者:Rear82
 
+class Thread1 extends Thread {
 
-class Thread1 extends Thread{
 	private String name;
 	public String m;
-	
+	public int t;
+
 	public Thread1(String name) {
-		this.name=name;
+		this.name = name;
 	}
 	public int Direction;
-	
+
 	public void run() {
-		m="d";
-		while(1==1){
-		Scanner input = new Scanner(System.in);
-		m = input.next();
+		if (EatSnake.survive == true) {
+			m = "d";
+			t = 1;
+			while (EatSnake.survive = true) {
+				Scanner input = new Scanner(System.in);
+				m = input.next();
+
+			}
 		}
-		
+		t = 0;
+
 	}
 }
 
-
-
-
 public class EatSnake {
-	static Thread1 th=new Thread1("a");
+
+	static Thread1 th = new Thread1("a");
 	static boolean survive;
 	static int lengthOfSnake = 3;
 	static int stepOfGame = 3;
@@ -42,9 +46,7 @@ public class EatSnake {
 	static int DirectionBack[] = new int[1000];
 	static int pathOfSnake[][] = new int[1000][5];
 	static int pathOfSnakeBack[][][] = new int[1000][1000][5];
-	
-	
-	
+
 	public static void saveOnFile() throws Exception {
 		File file = new File("存档.txt");
 		if (!file.exists()) {
@@ -124,6 +126,7 @@ public class EatSnake {
 
 	public static void gameover() {
 		survive = false;
+
 		myprint("*", 20);
 		System.out.println("\n");
 		myprint(" ", 6, "Game over!");
@@ -131,26 +134,39 @@ public class EatSnake {
 		myprint(" ", 3, "Your score is " + (lengthOfSnake - 3));
 		System.out.println("\n");
 		myprint("*", 20);
-		System.out.println("\n\n游戏结束，是否重新开始?(按y重新开始)\n");
-		Scanner input = new Scanner(System.in);
-		String m = input.next();
-		switch (m) {
-			case "Y":
-			case "y":
-				clear(gameBoard);
-				//System.out.println(gameBoard[19][19]);
-				System.out.println("请输入刷新间隔时间:");
-				int t = input.nextInt();
-				Timer timer = new Timer();
-				th.start();
-				timer.schedule(new maingame(), 0, t);
-				//timer.schedule(new shuru(),1,1)
-				System.out.println("\n");
-				System.out.println("\n");
-				System.out.println("游戏开始!!!");
-				xmlprint(gameBoard);
-				break;
+		if (th.t == 1) {
+			System.out.println("\n\n是否重新开始?(按y重新开始)【请输入两至三遍】\n");
+			Scanner input = new Scanner(System.in);
+			try {
+				sleep(1);
+			} catch (InterruptedException ex) {
+				Logger.getLogger(EatSnake.class.getName()).log(Level.SEVERE, null, ex);
+			}
+			String m = input.next();
+			survive = false;
+			switch (m) {
+				case "Y":
+				case "y":
 
+					//System.out.println(gameBoard[19][19]);
+					System.out.println("请输入刷新间隔时间【请输入两至三遍】:");
+					int t = input.nextInt();
+					clear(gameBoard);
+					Timer timer = new Timer();
+					th.m = "d";
+
+					timer.schedule(new maingame(), 100, t);
+					System.out.println("\n");
+					System.out.println("\n");
+					xmlprint(gameBoard);
+
+					//timer.schedule(new shuru(),1,1)
+					System.out.println("\n");
+					System.out.println("\n");
+					System.out.println("输入任意键来开始游戏！:");
+
+					break;
+			}
 		}
 
 	}
@@ -249,10 +265,9 @@ public class EatSnake {
 	}
 
 	static class maingame extends TimerTask {
-	
+
 		public void run() {
 			if (survive == true) {
-				
 
 				String m = th.m;
 				String n = m;
@@ -315,8 +330,10 @@ public class EatSnake {
 
 						//}
 						if (gameBoard[pathOfSnake[stepOfGame][1]][pathOfSnake[stepOfGame][2]] == 1 || gameBoard[pathOfSnake[stepOfGame][1]][pathOfSnake[stepOfGame][2]] == 2) {
-							gameover();
+							survive = false;
 							cancel();
+							gameover();
+
 						} else if (gameBoard[pathOfSnake[stepOfGame][1]][pathOfSnake[stepOfGame][2]] == 3) {
 							lengthOfSnake++;
 							gameBoard[pathOfSnake[stepOfGame][1]][pathOfSnake[stepOfGame][2]] = 1;
@@ -336,7 +353,7 @@ public class EatSnake {
 						}
 
 						gameSave();
-						{
+						 {
 							try {
 								saveOnFile();
 							} catch (Exception ex) {
@@ -443,10 +460,10 @@ public class EatSnake {
 		System.out.println("\n");
 		System.out.println("\n");
 		System.out.println("游戏开始!!!");
-		
+
 		th.start();
 		timer.schedule(new maingame(), 100, t);
-		
+
 		xmlprint(gameBoard);
 	}
 
