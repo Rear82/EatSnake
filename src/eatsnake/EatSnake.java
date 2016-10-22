@@ -138,7 +138,7 @@ public class EatSnake {
 			System.out.println("\n\n是否重新开始?(按y重新开始)【请输入两至三遍】\n");
 			Scanner input = new Scanner(System.in);
 			try {
-				sleep(1);
+				sleep(1000);
 			} catch (InterruptedException ex) {
 				Logger.getLogger(EatSnake.class.getName()).log(Level.SEVERE, null, ex);
 			}
@@ -432,9 +432,13 @@ public class EatSnake {
 
 	public static void main(String args[]) {
 		Timer timer = new Timer();
-		System.out.println("欢迎来到贪吃蛇小游戏！\n开发者:Rear82\n操作说明:使用w键向上，s键向下，d键向右，a键向左。\n您也可以输入b键来撤销上一步操作。\n输入1来载入上次游戏，输入2开始新的游戏！");
+		System.out.println("欢迎来到贪吃蛇小游戏！\n开发者:Rear82\n操作说明:使用w键向上，s键向下，d键向右，a键向左。");
 		Scanner input = new Scanner(System.in);
-		String m = input.next();
+		String m;
+		do {
+			System.out.println("\n您也可以输入b键来撤销上一步操作。\n输入1来载入上次游戏，输入2开始新的游戏！");
+			m = input.next();
+		} while (!"1".equals(m) && !"2".equals(m));
 		System.out.println("请输入刷新间隔时间:");
 		int t = input.nextInt();
 		int u = 0;
