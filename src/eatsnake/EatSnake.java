@@ -39,7 +39,7 @@ public class EatSnake {
 	static Thread1 th = new Thread1("a");
 	static boolean survive;
 	static int lengthOfSnake = 3;
-	static int stepOfGame = 3;
+	static int stepOfGame = 3, time;
 	static int gameBoard[][] = new int[20][20];
 	static int chessBoardBack[][][] = new int[1000][20][20];
 	static int Direction = 1;
@@ -134,39 +134,44 @@ public class EatSnake {
 		myprint(" ", 3, "Your score is " + (lengthOfSnake - 3));
 		System.out.println("\n");
 		myprint("*", 20);
-		if (th.t == 1) {
-			System.out.println("\n\n是否重新开始?(按y重新开始)【请输入两至三遍】\n");
-			Scanner input = new Scanner(System.in);
+		Scanner input = new Scanner(System.in);
+		/*if (th.t == 1) {
+		 System.out.println("\n\n是否重新开始?(按y重新开始)【请输入两至三遍】\n");
+		 */
+		System.out.println("\n");
+		for (int i = 1; i <= 5; i++) {
+			System.out.println("游戏将在" + Integer.toString(6 - i) + "秒后重新开始。");
 			try {
 				sleep(1000);
 			} catch (InterruptedException ex) {
 				Logger.getLogger(EatSnake.class.getName()).log(Level.SEVERE, null, ex);
 			}
-			String m = input.next();
-			survive = false;
-			switch (m) {
-				case "Y":
-				case "y":
+		}
+		//String m = input.next();
+		survive = false;
+		String m = "y";
+		switch (m) {
+			case "Y":
+			case "y":
 
 					//System.out.println(gameBoard[19][19]);
-					System.out.println("请输入刷新间隔时间【请输入两至三遍】:");
-					int t = input.nextInt();
-					clear(gameBoard);
-					Timer timer = new Timer();
-					th.m = "d";
+					/*System.out.println("请输入刷新间隔时间【请输入两至三遍】:");
+				 int t = input.nextInt();*/
+				clear(gameBoard);
+				Timer timer = new Timer();
+				th.m = "d";
 
-					timer.schedule(new maingame(), 100, t);
-					System.out.println("\n");
-					System.out.println("\n");
-					xmlprint(gameBoard);
+				timer.schedule(new maingame(), 100, time);
+				System.out.println("\n");
+				System.out.println("\n");
+				xmlprint(gameBoard);
 
-					//timer.schedule(new shuru(),1,1)
-					System.out.println("\n");
-					System.out.println("\n");
-					System.out.println("输入任意键来开始游戏！:");
+				//timer.schedule(new shuru(),1,1)
+				System.out.println("\n");
+				System.out.println("\n");
+				System.out.println("游戏已经重新开始!:");
 
-					break;
-			}
+				break;
 		}
 
 	}
@@ -467,7 +472,7 @@ public class EatSnake {
 
 		th.start();
 		timer.schedule(new maingame(), 100, t);
-
+		time = t;
 		xmlprint(gameBoard);
 	}
 
