@@ -6,6 +6,7 @@ import java.io.*;
 import static java.lang.Thread.sleep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.*;
 //开发者:Rear82
 
 class Thread1 extends Thread {
@@ -444,8 +445,15 @@ public class EatSnake {
 			System.out.println("\n您也可以输入b键来撤销上一步操作。\n输入1来载入上次游戏，输入2开始新的游戏！");
 			m = input.next();
 		} while (!"1".equals(m) && !"2".equals(m));
+		
+		Pattern p=Pattern.compile("[1-9][0-9]*");
+		Matcher wh;
+		String t;
+		do{
 		System.out.println("请输入刷新间隔时间:");
-		int t = input.nextInt();
+		t = input.next();
+		wh=p.matcher(t);
+		}while(wh.matches()==false);
 		int u = 0;
 		switch (m) {
 			case "1":
@@ -471,8 +479,8 @@ public class EatSnake {
 		System.out.println("游戏开始!!!");
 
 		th.start();
-		timer.schedule(new maingame(), 100, t);
-		time = t;
+		timer.schedule(new maingame(), 100,Integer.parseInt(t));
+		time =Integer.parseInt(t);
 		xmlprint(gameBoard);
 	}
 
