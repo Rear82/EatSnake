@@ -155,7 +155,7 @@ public class EatSnake {
 			case "Y":
 			case "y":
 
-					//System.out.println(gameBoard[19][19]);
+				//System.out.println(gameBoard[19][19]);
 					/*System.out.println("请输入刷新间隔时间【请输入两至三遍】:");
 				 int t = input.nextInt();*/
 				clear(gameBoard);
@@ -445,15 +445,15 @@ public class EatSnake {
 			System.out.println("\n您也可以输入b键来撤销上一步操作。\n输入1来载入上次游戏，输入2开始新的游戏！");
 			m = input.next();
 		} while (!"1".equals(m) && !"2".equals(m));
-		
-		Pattern p=Pattern.compile("[1-9][0-9]*");
+
+		Pattern p = Pattern.compile("[1-9][0-9]*");
 		Matcher wh;
 		String t;
-		do{
-		System.out.println("请输入刷新间隔时间:");
-		t = input.next();
-		wh=p.matcher(t);
-		}while(wh.matches()==false);
+		do {
+			System.out.println("请输入刷新间隔时间:");
+			t = input.next();
+			wh = p.matcher(t);
+		} while (wh.matches() == false);
 		int u = 0;
 		switch (m) {
 			case "1":
@@ -479,8 +479,8 @@ public class EatSnake {
 		System.out.println("游戏开始!!!");
 
 		th.start();
-		timer.schedule(new maingame(), 100,Integer.parseInt(t));
-		time =Integer.parseInt(t);
+		timer.schedule(new maingame(), 100, Integer.parseInt(t));
+		time = Integer.parseInt(t);
 		xmlprint(gameBoard);
 	}
 
