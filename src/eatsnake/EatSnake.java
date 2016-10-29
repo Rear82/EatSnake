@@ -92,32 +92,32 @@ public class EatSnake {
 			String s, m;
 			m = null;
 			s = null;
-			int[] shuju = new int[10000];
+			int[] document = new int[10000];
 
 			for (i = 0; i < 1000; i++) {
-				shuju[i] = -1;
+				document[i] = -1;
 			}
 
 			i = 0;
 			while ((s = br.readLine()) != null) {
-				shuju[i] = Integer.parseInt(s);
+				document[i] = Integer.parseInt(s);
 				i++;
 			}
 
-			lengthOfSnake = shuju[0];
-			Direction = shuju[1];
-			stepOfGame = shuju[2];
+			lengthOfSnake = document[0];
+			Direction = document[1];
+			stepOfGame = document[2];
 			for (i = 0; i < 20; i++) {
 				for (j = 0; j < 20; j++) {
-					gameBoard[i][j] = shuju[i * 20 + j + 3];
+					gameBoard[i][j] = document[i * 20 + j + 3];
 				}
 			}
 
 			for (i = 403; i < 9999; i++) {
-				if (shuju[i] == -1) {
+				if (document[i] == -1) {
 					break;
 				} else {
-					pathOfSnake[stepOfGame - lengthOfSnake + 1 + (int) ((i - 403) / 2)][(i - 403) % 2 + 1] = shuju[i];
+					pathOfSnake[stepOfGame - lengthOfSnake + 1 + (int) ((i - 403) / 2)][(i - 403) % 2 + 1] = document[i];
 				}
 			}
 
